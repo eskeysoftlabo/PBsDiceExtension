@@ -1,4 +1,4 @@
--- PB's Dice Extension -- R3 in the chat screen
+-- PB's DiceExtension -- R3 in the chat screen
 --
 -- The chat screen's text input area comes with four keybinds: back, focus, send, and the
 -- game's Random Roll on the third one. This adds a fifth, on the right stick click, that rolls

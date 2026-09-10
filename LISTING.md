@@ -2,7 +2,7 @@
 
 Text for the Bethesda.net / ZOS Console AddOn Uploader entry. Plain text, no markdown —
 paste as-is. The **name** field is what the in-game add-on browser shows, so it must read
-`PB's Dice Extension` there; `## Title` in the manifest does not reach that screen.
+`PB's DiceExtension` there; `## Title` in the manifest does not reach that screen.
 
 The "only you / everyone" split is in both Overview and Description on purpose. It is the one
 thing somebody has to understand before installing rather than after: a dice roll you think
@@ -12,7 +12,7 @@ your group saw and they did not is worse than no dice roll at all.
 
 ## Name
 
-PB's Dice Extension
+PB's DiceExtension
 
 ## Overview (JP)
 

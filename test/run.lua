@@ -1,4 +1,4 @@
--- Behavioural tests for PB's Dice Extension.
+-- Behavioural tests for PB's DiceExtension.
 --
 --   lua test/run.lua        (from the add-on folder; any Lua 5.1+)
 --

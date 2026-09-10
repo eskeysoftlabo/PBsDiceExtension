@@ -1,4 +1,4 @@
--- PB's Dice Extension -- the settings panel
+-- PB's DiceExtension -- the settings panel
 --
 -- Two sliders, three checkboxes and two buttons, in the order somebody actually thinks in:
 -- what am I rolling, what do I want to see, and who else sees it.

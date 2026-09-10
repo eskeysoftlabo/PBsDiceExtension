@@ -1,4 +1,4 @@
--- PB's Dice Extension -- the dice themselves
+-- PB's DiceExtension -- the dice themselves
 --
 -- Everything in this file is arithmetic and string building, which is the point: it is the
 -- part that decides what a roll is, and it can all be checked on a laptop instead of on a

@@ -1,4 +1,4 @@
--- PB's Dice Extension
+-- PB's DiceExtension
 -- Author: PinkBanther
 --
 -- The chat window already has a random roll. On a console it is the third keybind in the chat
@@ -65,10 +65,10 @@ local addon = {
 local em = EVENT_MANAGER
 
 -- TYPOGRAPHIC apostrophe (U+2019). With an ASCII ' here the settings panel eats the whole
--- "PB's " and shows "Dice Extension". The manifest keeps the ASCII form, because that is what
+-- "PB's " and shows "DiceExtension". The manifest keeps the ASCII form, because that is what
 -- the in-game add-on list and the store listing want. Written as the character itself and not
 -- as "\u{2019}": that escape is Lua 5.3 and the client is 5.1.
-local DISPLAY_NAME = "PB’s Dice Extension"
+local DISPLAY_NAME = "PB’s DiceExtension"
 local AUTHOR = "PinkBanther"
 local SLASH = "/pbdice"
 -- Claimed only if it is free. /dice is the name somebody else's add-on would reasonably want

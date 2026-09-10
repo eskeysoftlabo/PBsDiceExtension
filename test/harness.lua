@@ -1,4 +1,4 @@
--- Stub of just enough ESO client to exercise PB's Dice Extension.
+-- Stub of just enough ESO client to exercise PB's DiceExtension.
 --
 -- The add-on runs on a console, where one real test costs a whole session: build, upload, boot
 -- the PS5, log in. What this add-on decides is a spec, a range and a sentence, and all three

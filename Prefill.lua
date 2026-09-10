@@ -1,4 +1,4 @@
--- PB's Dice Extension -- putting the real command in the chat box
+-- PB's DiceExtension -- putting the real command in the chat box
 --
 -- This is the only file that touches the client's UI, and it is written under a rule learned
 -- the expensive way (PB's MailerExtension, on a PS5): add-on Lua is insecure code, one add-on

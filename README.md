@@ -1,10 +1,10 @@
-# PB's Dice Extension
+# PB's DiceExtension
 
 Gives the chat window's random roll the dice you actually want — for **The Elder Scrolls
 Online on console** (PS5 / Xbox Series X|S).
 
 - **Author:** PinkBanther
-- **Version:** 1.4.0
+- **Version:** 1.4.1
 - **Requires:** nothing. `LibHarvensAddonSettings` >= 20106 is optional and adds the settings
   panel; without it everything is reachable from `/pbdice`.
 
