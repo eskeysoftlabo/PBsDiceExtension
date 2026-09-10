@@ -30,8 +30,10 @@ local strings = {
 	SI_PBSDICE_KEYBIND_TOOLTIP = "Adds a button to the chat screen, on the right stick click. Press it and it rolls your dice in your own chat. Hold it for half a second and it puts the matching /roll command in the chat box instead, so that pressing Send has the game roll them and your group sees the result -- the last press has to be yours, because an add-on cannot send chat. The game's own Random Roll on the third button is untouched and still does what it always did. It is a spare button rather than a long press on that one because the game rolls the instant that button goes down, and an add-on that took the button over could no longer reach the roll the group sees.",
 
 	-- The label on the button, next to the game's own "Random Roll". Named rather than just
-	-- described, so that a strip with five buttons on it says which one is not the game's.
-	SI_PBSDICE_KEYBIND_NAME = "PB's Dice: roll %dd%d",
+	-- described, so that a strip with five buttons on it says which one is not the game's,
+	-- and carrying both of its actions because the strip gives a keybind exactly one row:
+	-- a second row on the same key asserts and deletes the first (HandleDuplicateAddKeybind).
+	SI_PBSDICE_KEYBIND_NAME = "PB's Dice: roll (only you / hold: everyone)",
 
 	SI_PBSDICE_PREFILL = "Put /roll in the chat box",
 	SI_PBSDICE_PREFILL_TOOLTIP = "When you open the chat screen, the text box is filled in with the /roll command for your dice -- press Send and the game rolls them, in the group's chat, where everybody sees it. The box is only filled when it is empty, so nothing you left half-typed is ever replaced; when you opened chat to say something instead, clear it and type. Off by default for that reason.",

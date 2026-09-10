@@ -251,12 +251,13 @@ check("five rows where the client wrote four", KeybindRowCount(), 5)
 check("the game's roll button still has the game's callback",
 	KeybindEntry("UI_SHORTCUT_TERTIARY").callback, ClientRandomRollCallback)
 
+-- One row is all the strip will give a keybind, so the label has to say both things: what a
+-- press does and what a hold does, and which of them the group can see.
 addon:SetCount(3)
-addon:SetSides(20)
-checkContains("the button is named for the add-on", KeybindLabel(addon.ROLL_KEYBIND), "PB's Dice")
-checkContains("and says what it will roll", KeybindLabel(addon.ROLL_KEYBIND), "3d20")
 addon:SetSides(6)
-checkContains("and follows the setting without being rebuilt", KeybindLabel(addon.ROLL_KEYBIND), "3d6")
+checkContains("the button is named for the add-on", KeybindLabel(addon.ROLL_KEYBIND), "PB's Dice")
+checkContains("a press is yours alone", KeybindLabel(addon.ROLL_KEYBIND), "only you")
+checkContains("and a hold is everybody's", KeybindLabel(addon.ROLL_KEYBIND), "hold: everyone")
 
 ClearChat()
 check("pressing it works", PressKeybind(addon.ROLL_KEYBIND), "pressed")

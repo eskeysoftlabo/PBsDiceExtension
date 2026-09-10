@@ -4,7 +4,7 @@ Gives the chat window's random roll the dice you actually want — for **The Eld
 Online on console** (PS5 / Xbox Series X|S).
 
 - **Author:** PinkBanther
-- **Version:** 1.3.0
+- **Version:** 1.4.0
 - **Requires:** nothing. `LibHarvensAddonSettings` >= 20106 is optional and adds the settings
   panel; without it everything is reachable from `/pbdice`.
 
@@ -36,9 +36,13 @@ you: it reports the total and nothing else.
 
 The chat screen's text input area has four buttons on it — back, focus, send, and the game's
 Random Roll on the third one. This adds a fifth, on the **right stick click**, sitting to the
-right of the game's roll button and labelled with the dice it will roll
-(`PB's Dice: roll 3d20`, and it renames itself when you move a slider). The game's Random Roll
-is left exactly as the game wrote it and still does what it always did.
+right of the game's roll button, labelled `PB's Dice: roll (only you / hold: everyone)`. The
+game's Random Roll is left exactly as the game wrote it and still does what it always did.
+
+One label for two actions, because the strip gives a keybind exactly one button: a second row
+on the same key trips an assert and deletes the first
+(`ZO_KeybindStrip:HandleDuplicateAddKeybind`), and the strip does not take `showAsHold` from a
+descriptor either. The client's own screens write a press-or-hold button the same way.
 
 **Press it** and it rolls your dice in your own chat. **Hold it for half a second** and it puts
 `/roll 3d20` in the chat box instead — press Send and the game rolls them where the group can
@@ -173,8 +177,8 @@ lua test/run.lua
 138 checks, no game required: how a spec is read, that ten dice of a thousand sides is the
 edge and eleven is not, that 2000 rolls of 3d6 never leave 1..6 and always add up, that one die
 is a die and three are dice in the client's own sentence, what goes in the chat box, that the keybind table does not exist until the chat
-screen is first shown and that R3 is added when it does, that turning R3 off makes it
-unpressable, that a short press rolls and a long one stages while a half-typed message survives
+screen is first shown and that R3 is added when it does, that the button's one label names both of its
+actions, that turning R3 off makes it unpressable, that a short press rolls and a long one stages while a half-typed message survives
 both — and the two that would otherwise cost a console session: that what goes
 in the chat box never replaces something you typed, and that the game's Random Roll still holds
 the game's own callback after all of it — and that the Japanese table has a line for every English one, taking

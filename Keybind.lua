@@ -106,10 +106,14 @@ function addon:InitChatKeybind()
 		-- else's claim on R3.
 		pbsDice = true,
 
-		-- A function, because the strip re-reads it every time it draws the button: the label
-		-- is the dice you have set right now, so moving a slider renames the button.
+		-- One row, one label, and it has to carry both actions: the strip gives a keybind
+		-- exactly one button, and a second row on the same key trips an assert and deletes
+		-- the first (ZO_KeybindStrip:HandleDuplicateAddKeybind). So the label says what a
+		-- press does and what a hold does, which is also how the client's own screens write
+		-- a press-or-hold button. It is a function because the strip re-reads it on every
+		-- draw, and a translated string is a thing that can change under us.
 		name = function()
-			return addon.Format(SI_PBSDICE_KEYBIND_NAME, addon:Count(), addon:Sides())
+			return GetString(SI_PBSDICE_KEYBIND_NAME)
 		end,
 
 		keybind = ROLL_KEYBIND,
