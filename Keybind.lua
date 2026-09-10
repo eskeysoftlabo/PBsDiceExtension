@@ -121,15 +121,76 @@ function addon:InitChatKeybind()
 			return addon:ChatKeybind()
 		end,
 
-		-- Ours from top to bottom: some arithmetic and a line of chat. Nothing in here reaches
-		-- for a client function, which is what makes it safe to be called from the strip.
-		callback = function()
-			addon:RollAndPrint()
+		-- Ask to be told about the key coming up as well as going down. This is a thing an
+		-- add-on may only do to a row it owns: setting it on the game's Random Roll row would
+		-- call the game's callback a second time on release, and rolling twice per press is
+		-- not a feature.
+		handlesKeyUp = true,
+
+		callback = function(up)
+			addon:OnRollKeybind(up)
 		end,
 	}
 
 	self.chatKeybindState = self.KEYBIND_ADDED
 	return true
+end
+
+-- Half a second. Long enough that nobody stages a command by accident, short enough that
+-- holding it does not feel like waiting for something to load.
+local HOLD_MS = 500
+
+-- SHORT PRESS rolls the add-on's dice, in your chat, where only you see them.
+-- LONG PRESS puts "/roll 3d20" in the chat box, so that pressing Send makes the game roll it
+-- and the group sees the result. That is the only way an add-on's dice can reach anybody
+-- else: SubmitTextEntry ends at SendChatMessage and DoCommand ends at RandomDiceRoll, and
+-- both of those are private, so the last press has to be the player's.
+--
+-- Because the two have to be told apart, the roll happens on the key coming UP rather than
+-- going down. That is a few hundredths of a second later than it used to be and is the whole
+-- cost of the feature.
+--
+-- Writing to the box while the text area has focus makes the client's OnTextChanged run
+-- UpdateKeybinds underneath us, which is client code on an add-on frame and therefore worth
+-- having checked: it takes ZO_KeybindStrip's updateOnly path, which reuses the existing button
+-- controls rather than acquiring from the pool, and skips the re-registration entirely when
+-- nothing about the button changed (suppressUpdate). The one callback it would register,
+-- OnKeybindLabelChanged, is a file-scope local created at client load, not a closure born
+-- during our call. So nothing of the client's is created while we are on the stack.
+function addon:OnRollKeybind(up)
+	if not up then
+		self.rollKeyDownAt = GetGameTimeMilliseconds and GetGameTimeMilliseconds() or 0
+		return
+	end
+
+	local downAt = self.rollKeyDownAt
+	self.rollKeyDownAt = nil
+
+	-- A key up with nothing under it: the screen changed while the button was held, or the
+	-- strip delivered one without the other. Read it as the short press, which is the one
+	-- that cannot surprise anybody.
+	local now = GetGameTimeMilliseconds and GetGameTimeMilliseconds() or 0
+	local held = downAt and (now - downAt) or 0
+
+	if held >= HOLD_MS then
+		self:StageChatCommand()
+	else
+		self:RollAndPrint()
+	end
+end
+
+-- The long press. Everything it can fail at, it says out loud.
+function addon:StageChatCommand()
+	local filled, why = self:FillChatBox(true)
+	if filled then
+		return true
+	end
+	if why == "occupied" then
+		self.Print(GetString(SI_PBSDICE_STAGE_OCCUPIED))
+	else
+		self.Print(GetString(SI_PBSDICE_STAGE_NO_BOX))
+	end
+	return false
 end
 
 function addon:InitChatKeybindWatch()

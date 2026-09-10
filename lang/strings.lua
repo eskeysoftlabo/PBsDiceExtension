@@ -27,7 +27,7 @@ local strings = {
 	SI_PBSDICE_TAG_TOOLTIP = "Puts a quiet marker at the end of a roll this add-on made, because it looks exactly like a roll the game made and it is not one -- nobody else saw it. Turn this off only if you already know which is which.",
 
 	SI_PBSDICE_KEYBIND = "Roll on R3 in the chat screen",
-	SI_PBSDICE_KEYBIND_TOOLTIP = "Adds a button to the chat screen, on the right stick click, that rolls your dice. The game's own Random Roll on the third button is untouched and still does what it always did. It is a spare button rather than a long press on that one because the game rolls the instant that button goes down, and an add-on that took the button over could no longer reach the roll the group sees.",
+	SI_PBSDICE_KEYBIND_TOOLTIP = "Adds a button to the chat screen, on the right stick click. Press it and it rolls your dice in your own chat. Hold it for half a second and it puts the matching /roll command in the chat box instead, so that pressing Send has the game roll them and your group sees the result -- the last press has to be yours, because an add-on cannot send chat. The game's own Random Roll on the third button is untouched and still does what it always did. It is a spare button rather than a long press on that one because the game rolls the instant that button goes down, and an add-on that took the button over could no longer reach the roll the group sees.",
 
 	-- The label on the button, next to the game's own "Random Roll". Named rather than just
 	-- described, so that a strip with five buttons on it says which one is not the game's.
@@ -45,6 +45,9 @@ local strings = {
 	SI_PBSDICE_RESET_BUTTON = "Reset",
 
 	-- ---- The roll ---------------------------------------------------------------------
+	SI_PBSDICE_STAGE_OCCUPIED = "the chat box already has something in it, so it was left alone -- clear it and hold again",
+	SI_PBSDICE_STAGE_NO_BOX = "the chat box is not here to write to",
+
 	SI_PBSDICE_LOCAL_TAG = " |c9d9d9d(only you)|r",
 	SI_PBSDICE_BREAKDOWN = "%s = %s",
 	SI_PBSDICE_RESULT_FALLBACK = "%s rolls %s with %s x %s-sided dice.",
@@ -90,7 +93,7 @@ local strings = {
 	SI_PBSDICE_HELP_SIDES = "/pbdice sides 20 -- how many sides, 2 to 1000",
 	SI_PBSDICE_HELP_EACH = "/pbdice each on | off -- show what each die rolled",
 	SI_PBSDICE_HELP_TAG = "/pbdice tag on | off -- mark rolls only you can see",
-	SI_PBSDICE_HELP_KEYBIND = "/pbdice keybind on | off -- roll on R3 in the chat screen",
+	SI_PBSDICE_HELP_KEYBIND = "/pbdice keybind on | off -- R3 in the chat screen: press to roll, hold to stage /roll",
 	SI_PBSDICE_HELP_PREFILL = "/pbdice prefill on | off -- have the chat box ready with /roll",
 	SI_PBSDICE_HELP_STATUS = "/pbdice status -- what the settings are",
 	SI_PBSDICE_HELP_RESET = "/pbdice reset -- every setting back to default",

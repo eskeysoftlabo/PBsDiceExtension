@@ -42,21 +42,28 @@ local function TextEdit()
 	return edit
 end
 
-function addon:FillChatBox()
-	if not self:Prefill() then
-		return false
+-- force is the difference between the two callers. Opening the chat screen fills the box only
+-- if the setting says so; holding R3 is somebody asking for it right now, and does not consult
+-- a checkbox. Both obey the rule below.
+--
+-- Returns whether it filled, and if not, why -- the automatic caller ignores the reason and
+-- the deliberate one says it out loud, because an explicit action that silently does nothing
+-- is the worst of the three outcomes.
+function addon:FillChatBox(force)
+	if not force and not self:Prefill() then
+		return false, "off"
 	end
 
 	local edit = TextEdit()
 	if not edit then
-		return false
+		return false, "nobox"
 	end
 
 	-- Never overwrite. The box holds whatever the player last left in it, and a half-typed
 	-- whisper replaced by "/roll 3d20" is a worse bug than the feature is a feature.
 	local existing = type(edit.GetText) == "function" and edit:GetText() or ""
 	if existing ~= "" then
-		return false
+		return false, "occupied"
 	end
 
 	edit:SetText((self.dice:CommandText(self:Count(), self:Sides())))

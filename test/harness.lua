@@ -99,7 +99,12 @@ function ZO_GetPrimaryPlayerName(_, character) return character end
 
 -- ---- clocks -------------------------------------------------------------------------
 function GetTimeStamp() return 20706 * 86400 + 12 * 3600 end
-function GetGameTimeMilliseconds() return 1234567 end
+
+-- Advanceable, because the difference between a press and a hold is a number of milliseconds
+-- and there is no other way to hold a button down in a test.
+local gameTimeMs = 1234567
+function GetGameTimeMilliseconds() return gameTimeMs end
+function AdvanceGameTime(ms) gameTimeMs = gameTimeMs + ms end
 
 -- ---- the client's roll --------------------------------------------------------------
 -- The real numbers off a live client are not knowable from here, so these are placeholders
@@ -256,12 +261,29 @@ end
 
 -- Pressing a button on the keybind strip, as far as a descriptor can tell: a hidden row is
 -- not pressable, which is how the strip turns a "visible" predicate into an off switch.
-function PressKeybind(keybind)
+--
+-- The strip calls callback(DOWN) on the way down and, only if handlesKeyUp is set,
+-- callback(UP) on the way back -- the false/true the real one passes. holdMs is how long the
+-- button stays down.
+function PressKeybind(keybind, holdMs)
 	local entry = KeybindEntry(keybind)
 	if not entry then return "no such keybind" end
 	if entry.visible and not entry.visible(entry) then return "hidden" end
 	entry.callback(false)
+	if entry.handlesKeyUp then
+		AdvanceGameTime(holdMs or 0)
+		entry.callback(true)
+	end
 	return "pressed"
+end
+
+-- Half a press: the key went down and the strip never told anybody it came up, which is what
+-- a screen change under a held button looks like from here.
+function PressKeybindDownOnly(keybind)
+	local entry = KeybindEntry(keybind)
+	if not entry then return "no such keybind" end
+	entry.callback(false)
+	return "down"
 end
 
 function KeybindLabel(keybind)

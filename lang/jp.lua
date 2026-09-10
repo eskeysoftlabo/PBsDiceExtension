@@ -25,7 +25,7 @@ local strings = {
 	SI_PBSDICE_TAG_TOOLTIP = "このアドオンが振ったロールの末尾に、目立たない印を付けます。見た目が本物のロールとまったく同じなのに、実際には誰にも見えていないためです。どちらか判別できる方だけオフにしてください。",
 
 	SI_PBSDICE_KEYBIND = "チャット画面のR3で振る",
-	SI_PBSDICE_KEYBIND_TOOLTIP = "チャット画面に、右スティック押し込み（R3）でダイスを振るボタンを追加します。△のランダムロールはそのままで、今までどおり動きます。△の長押しではなく空きボタンにしているのは、△は押し込んだ瞬間にゲームがロールしてしまうためで、△を乗っ取ると今度は全員に見える本物のロールに手が届かなくなるからです。",
+	SI_PBSDICE_KEYBIND_TOOLTIP = "チャット画面に、右スティック押し込み（R3）のボタンを追加します。押すと自分のチャットにダイスの結果が出ます。0.5秒長押しすると、代わりに対応する /roll コマンドを入力欄に入れるので、送信を押せばゲーム本体がロールしてグループ全員に見えます。最後の送信だけはプレイヤーが押す必要があります（アドオンからチャットは送れないため）。△のランダムロールはそのままで、今までどおり動きます。△の長押しではなく空きボタンにしているのは、△は押し込んだ瞬間にゲームがロールしてしまうためで、△を乗っ取ると今度は全員に見える本物のロールに手が届かなくなるからです。",
 
 	SI_PBSDICE_KEYBIND_NAME = "PB's Dice %dd%dを振る",
 
@@ -42,6 +42,9 @@ local strings = {
 	SI_PBSDICE_RESET_BUTTON = "リセット",
 
 	-- ---- ロール結果 --------------------------------------------------------------------
+	SI_PBSDICE_STAGE_OCCUPIED = "入力欄に文字が残っているので、そのままにしました。消してからもう一度長押ししてください",
+	SI_PBSDICE_STAGE_NO_BOX = "書き込む入力欄が見つかりません",
+
 	SI_PBSDICE_LOCAL_TAG = " |c9d9d9d(自分のみ)|r",
 	SI_PBSDICE_BREAKDOWN = "%s = %s",
 	SI_PBSDICE_RESULT_FALLBACK = "%sが%sをロール(%s x %s面)。",
@@ -87,7 +90,7 @@ local strings = {
 	SI_PBSDICE_HELP_SIDES = "/pbdice sides 20 -- ダイスの面数、2〜1000",
 	SI_PBSDICE_HELP_EACH = "/pbdice each on | off -- 各ダイスの出目を表示する",
 	SI_PBSDICE_HELP_TAG = "/pbdice tag on | off -- 自分のみのロールに印を付ける",
-	SI_PBSDICE_HELP_KEYBIND = "/pbdice keybind on | off -- チャット画面のR3で振る",
+	SI_PBSDICE_HELP_KEYBIND = "/pbdice keybind on | off -- チャット画面のR3（押す=振る、長押し=/rollを用意）",
 	SI_PBSDICE_HELP_PREFILL = "/pbdice prefill on | off -- チャット入力欄に /roll を入れておく",
 	SI_PBSDICE_HELP_STATUS = "/pbdice status -- 現在の設定を表示",
 	SI_PBSDICE_HELP_RESET = "/pbdice reset -- すべての設定を初期値に戻す",

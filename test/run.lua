@@ -270,6 +270,57 @@ check("and nothing was rolled", #Chat, 0)
 addon:SetChatKeybind(true)
 check("on again", PressKeybind(addon.ROLL_KEYBIND), "pressed")
 
+print("\n== 9b. press and hold ==")
+-- Short press rolls; long press stages the command the game will roll. The two have to be
+-- told apart on the way up, so the row asks for key ups -- something an add-on may only do to
+-- a row it owns. Doing it to the game's Random Roll row would roll twice per press.
+check("our row asks for key ups", KeybindEntry(addon.ROLL_KEYBIND).handlesKeyUp, true)
+check("the game's row does not, and we did not give it one",
+	KeybindEntry("UI_SHORTCUT_TERTIARY").handlesKeyUp, nil)
+
+addon:SetCount(3)
+addon:SetSides(20)
+addon:SetPrefill(false)
+
+ClearChat()
+ChatEdit:Clear()
+check("a short press", PressKeybind(addon.ROLL_KEYBIND, 100), "pressed")
+checkContains("rolls your dice", PlainChat(1), "3 x 20-sided dice.")
+check("and leaves the chat box alone", ChatEdit:GetText(), "")
+
+ClearChat()
+ChatEdit:Clear()
+check("a long press", PressKeybind(addon.ROLL_KEYBIND, 600), "pressed")
+check("stages the command the group will see", ChatEdit:GetText(), "/roll 3d20")
+check("and rolls nothing itself", #Chat, 0)
+
+-- It does not consult the "fill the box when the screen opens" checkbox: somebody holding the
+-- button is asking for it now.
+check("staging does not need the prefill setting", addon:Prefill(), false)
+
+ClearChat()
+ChatEdit:SetText("hello there")
+PressKeybind(addon.ROLL_KEYBIND, 600)
+check("a half-typed message is never overwritten", ChatEdit:GetText(), "hello there")
+checkContains("and the refusal is said out loud", PlainChat(1), "already has something in it")
+
+-- The key going down must not roll on its own, or a hold would roll AND stage.
+ClearChat()
+ChatEdit:Clear()
+check("down alone", PressKeybindDownOnly(addon.ROLL_KEYBIND), "down")
+check("rolls nothing yet", #Chat, 0)
+check("and stages nothing", ChatEdit:GetText(), "")
+
+-- ...and a key up with no down under it -- the screen changed while it was held -- is read as
+-- the short press, which is the one that cannot surprise anybody.
+addon.rollKeyDownAt = nil
+AdvanceGameTime(9000)
+ClearChat()
+KeybindEntry(addon.ROLL_KEYBIND).callback(true)
+checkContains("an orphaned key up rolls rather than stages", PlainChat(1), "3 x 20-sided dice.")
+check("and still stages nothing", ChatEdit:GetText(), "")
+
+print("\n== 9c. opening it again ==")
 -- Every later open runs it again, and every later open must find its own row and stop.
 OpenChatScreen(SCENE_SHOWING)
 OpenChatScreen(SCENE_SHOWING)

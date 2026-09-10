@@ -4,7 +4,7 @@ Gives the chat window's random roll the dice you actually want — for **The Eld
 Online on console** (PS5 / Xbox Series X|S).
 
 - **Author:** PinkBanther
-- **Version:** 1.2.0
+- **Version:** 1.3.0
 - **Requires:** nothing. `LibHarvensAddonSettings` >= 20106 is optional and adds the settings
   panel; without it everything is reachable from `/pbdice`.
 
@@ -39,6 +39,22 @@ Random Roll on the third one. This adds a fifth, on the **right stick click**, s
 right of the game's roll button and labelled with the dice it will roll
 (`PB's Dice: roll 3d20`, and it renames itself when you move a slider). The game's Random Roll
 is left exactly as the game wrote it and still does what it always did.
+
+**Press it** and it rolls your dice in your own chat. **Hold it for half a second** and it puts
+`/roll 3d20` in the chat box instead — press Send and the game rolls them where the group can
+see it. That is two presses for a roll everybody sees, without turning on the setting that
+occupies the box every time you open chat. The two have to be told apart on the way up, so the
+row asks for key ups (`handlesKeyUp`) and the roll happens on release rather than on press —
+which is a thing an add-on may only do to a row it owns: setting it on the game's Random Roll
+row would call the game's callback a second time and roll twice per press.
+
+Writing to the box while the text area has focus makes the client's `OnTextChanged` run
+`UpdateKeybinds` underneath an add-on frame, so that path was checked before being taken: it
+goes through `ZO_KeybindStrip`'s `updateOnly` branch, which reuses the existing button controls
+rather than acquiring from the pool and skips the re-registration entirely when nothing about
+the button changed (`suppressUpdate`). The one callback it would register,
+`OnKeybindLabelChanged`, is a file-scope local created at client load, not a closure born
+during the call. Nothing of the client's is created while we are on the stack.
 
 The row has to be added at a particular moment, and it is not the obvious one. The chat screen
 does not build `textInputAreaKeybindDescriptor` in its `Initialize` — it builds it in
@@ -103,7 +119,7 @@ setting, and it is why it ships off.
 | `/pbdice sides 20` | how many sides, 2 to 1000 |
 | `/pbdice each on\|off` | show what each die rolled |
 | `/pbdice tag on\|off` | mark rolls only you can see |
-| `/pbdice keybind on\|off` | roll on R3 in the chat screen |
+| `/pbdice keybind on\|off` | R3 in the chat screen: press to roll, hold to stage `/roll` |
 | `/pbdice prefill on\|off` | have the chat box ready with `/roll` |
 | `/pbdice status` | what the settings are, and what to send for a roll the group sees |
 | `/pbdice reset` | every setting back to default |
@@ -154,11 +170,12 @@ one command and not a theory.
 lua test/run.lua
 ```
 
-122 checks, no game required: how a spec is read, that ten dice of a thousand sides is the
+138 checks, no game required: how a spec is read, that ten dice of a thousand sides is the
 edge and eleven is not, that 2000 rolls of 3d6 never leave 1..6 and always add up, that one die
 is a die and three are dice in the client's own sentence, what goes in the chat box, that the keybind table does not exist until the chat
 screen is first shown and that R3 is added when it does, that turning R3 off makes it
-unpressable — and the two that would otherwise cost a console session: that what goes
+unpressable, that a short press rolls and a long one stages while a half-typed message survives
+both — and the two that would otherwise cost a console session: that what goes
 in the chat box never replaces something you typed, and that the game's Random Roll still holds
 the game's own callback after all of it — and that the Japanese table has a line for every English one, taking
 the same arguments in the same order.
